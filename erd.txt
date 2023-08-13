@@ -1,4 +1,6 @@
-CREATE TABLE if not exists salesperson
+-- CREATE SCHEMA if not exists public;
+
+CREATE TABLE if not exists dealer.public.salesperson
 (
     salesperson_id SERIAL PRIMARY KEY,
     salesperson_name VARCHAR(100) NOT NULL,
@@ -7,14 +9,14 @@ CREATE TABLE if not exists salesperson
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE if not exists dealership
+CREATE TABLE if not exists dealer.public.dealership
 (
     dealership_id SERIAL PRIMARY KEY,
     name VARCHAR(30),
     location VARCHAR(100)
 );
 
-CREATE TABLE if not exists Car
+CREATE TABLE if not exists dealer.public.Car
 (
     car_id SERIAL PRIMARY KEY,
     make VARCHAR(50) NOT NULL,
@@ -31,7 +33,7 @@ CREATE TABLE if not exists Car
 
 
 
-CREATE TABLE if not exists customer
+CREATE TABLE if not exists dealer.public.customer
 (
     customer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -42,7 +44,7 @@ CREATE TABLE if not exists customer
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE if not exists sales
+CREATE TABLE if not exists dealer.public.sales
 (
     sales_id SERIAL PRIMARY KEY,
     salesperson_id INT NOT NULL,
@@ -52,7 +54,7 @@ CREATE TABLE if not exists sales
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE if not exists Service
+CREATE TABLE if not exists dealer.public.service
 (
     service_id SERIAL PRIMARY KEY,
     car_id INTEGER REFERENCES Car (car_id),
@@ -65,7 +67,7 @@ CREATE TABLE if not exists Service
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE if not exists purchase
+CREATE TABLE if not exists dealer.public.purchase
 (
     purchase_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -75,7 +77,7 @@ CREATE TABLE if not exists purchase
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE if not exists invoice
+CREATE TABLE if not exists dealer.public.invoice
 (
     invoice_id SERIAL PRIMARY KEY,
     salesperson_id INT NOT NULL,
@@ -88,7 +90,7 @@ CREATE TABLE if not exists invoice
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE if not exists customer_car
+CREATE TABLE if not exists dealer.public.customer_car
 (
     customer_car_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -98,7 +100,7 @@ CREATE TABLE if not exists customer_car
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE if not exists customer_service
+CREATE TABLE if not exists dealer.public.customer_service
 (
     customer_service_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -109,7 +111,7 @@ CREATE TABLE if not exists customer_service
     FOREIGN KEY (service_id) REFERENCES service (service_id)
 );
 
-CREATE TABLE if not exists service_ticket
+CREATE TABLE if not exists dealer.public.service_ticket
 (
     ticket_id SERIAL PRIMARY KEY,
     car_id INT NOT NULL,
@@ -119,7 +121,7 @@ CREATE TABLE if not exists service_ticket
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE if not exists mechanic
+CREATE TABLE if not exists dealer.public.mechanic
 (
     mechanic_id SERIAL PRIMARY KEY,
     mechanic_name VARCHAR(100) NOT NULL,
@@ -128,7 +130,7 @@ CREATE TABLE if not exists mechanic
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE if not exists car_mechanic
+CREATE TABLE if not exists dealer.public.car_mechanic
 (
     car_mechanic_id SERIAL PRIMARY KEY,
     car_id INT NOT NULL,
@@ -138,7 +140,7 @@ CREATE TABLE if not exists car_mechanic
     FOREIGN KEY (mechanic_id) REFERENCES mechanic (mechanic_id)
 );
 
-CREATE TABLE if not exists br_invoice
+CREATE TABLE if not exists dealer.public.br_invoice
 (
     br_invoice_id SERIAL PRIMARY KEY,
     invoice_id INT NOT NULL,
@@ -149,26 +151,26 @@ CREATE TABLE if not exists br_invoice
 
 
 ALTER TABLE Service
-    ADD COLUMN mechanic_id INT NOT NULL,
+    ADD COLUMN if not exists mechanic_id INT NOT NULL,
     ADD FOREIGN KEY (mechanic_id) REFERENCES mechanic (mechanic_id);
 
 ALTER TABLE purchase
-    ADD COLUMN purchase_price DECIMAL(10, 2) NOT NULL;
+    ADD COLUMN if not exists purchase_price DECIMAL(10, 2) NOT NULL;
 
 ALTER TABLE invoice
-    ADD COLUMN payment_status VARCHAR(20) NOT NULL;
+    ADD COLUMN if not exists payment_status VARCHAR(20) NOT NULL;
 
 ALTER TABLE customer_car
-    ADD COLUMN purchase_date DATE NOT NULL;
+    ADD COLUMN if not exists purchase_date DATE NOT NULL;
 
 ALTER TABLE customer_service
-    ADD COLUMN service_cost DECIMAL(10, 2) NOT NULL;
+    ADD COLUMN if not exists service_cost DECIMAL(10, 2) NOT NULL;
 
 ALTER TABLE service_ticket
-    ADD COLUMN ticket_status VARCHAR(20) NOT NULL;
+    ADD COLUMN if not exists ticket_status VARCHAR(20) NOT NULL;
 
 ALTER TABLE mechanic
-    ADD COLUMN mechanic_specialty VARCHAR(100) NOT NULL;
+    ADD COLUMN if not exists mechanic_specialty VARCHAR(100) NOT NULL;
 
 ALTER TABLE br_invoice
-    ADD COLUMN br_invoice_date DATE NOT NULL;
+    ADD COLUMN if not exists br_invoice_date DATE NOT NULL;
