@@ -1,4 +1,4 @@
-CREATE TABLE salesperson
+CREATE TABLE if not exists salesperson
 (
     salesperson_id SERIAL PRIMARY KEY,
     salesperson_name VARCHAR(100) NOT NULL,
@@ -7,7 +7,14 @@ CREATE TABLE salesperson
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Car
+CREATE TABLE if not exists dealership
+(
+    dealership_id SERIAL PRIMARY KEY,
+    name VARCHAR(30),
+    location VARCHAR(100)
+);
+
+CREATE TABLE if not exists Car
 (
     car_id SERIAL PRIMARY KEY,
     make VARCHAR(50) NOT NULL,
@@ -22,14 +29,9 @@ CREATE TABLE Car
     FOREIGN KEY (dealership_id) REFERENCES dealership (dealership_id)
 );
 
-CREATE TABLE dealership
-(
-    dealership_id SERIAL PRIMARY KEY,
-    name VARCHAR(30),
-    location VARCHAR(100)
-);
 
-CREATE TABLE customer
+
+CREATE TABLE if not exists customer
 (
     customer_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -40,7 +42,7 @@ CREATE TABLE customer
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sales
+CREATE TABLE if not exists sales
 (
     sales_id SERIAL PRIMARY KEY,
     salesperson_id INT NOT NULL,
@@ -50,7 +52,7 @@ CREATE TABLE sales
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE Service
+CREATE TABLE if not exists Service
 (
     service_id SERIAL PRIMARY KEY,
     car_id INTEGER REFERENCES Car (car_id),
@@ -63,7 +65,7 @@ CREATE TABLE Service
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE purchase
+CREATE TABLE if not exists purchase
 (
     purchase_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -73,7 +75,7 @@ CREATE TABLE purchase
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE invoice
+CREATE TABLE if not exists invoice
 (
     invoice_id SERIAL PRIMARY KEY,
     salesperson_id INT NOT NULL,
@@ -82,12 +84,11 @@ CREATE TABLE invoice
     total_price DECIMAL(10, 2) NOT NULL,
     invoice_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
     FOREIGN KEY (salesperson_id) REFERENCES salesperson (salesperson_id),
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE customer_car
+CREATE TABLE if not exists customer_car
 (
     customer_car_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -97,7 +98,7 @@ CREATE TABLE customer_car
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE customer_service
+CREATE TABLE if not exists customer_service
 (
     customer_service_id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -108,7 +109,7 @@ CREATE TABLE customer_service
     FOREIGN KEY (service_id) REFERENCES service (service_id)
 );
 
-CREATE TABLE service_ticket
+CREATE TABLE if not exists service_ticket
 (
     ticket_id SERIAL PRIMARY KEY,
     car_id INT NOT NULL,
@@ -118,7 +119,7 @@ CREATE TABLE service_ticket
     FOREIGN KEY (car_id) REFERENCES car (car_id)
 );
 
-CREATE TABLE mechanic
+CREATE TABLE if not exists mechanic
 (
     mechanic_id SERIAL PRIMARY KEY,
     mechanic_name VARCHAR(100) NOT NULL,
@@ -127,7 +128,7 @@ CREATE TABLE mechanic
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE car_mechanic
+CREATE TABLE if not exists car_mechanic
 (
     car_mechanic_id SERIAL PRIMARY KEY,
     car_id INT NOT NULL,
@@ -137,7 +138,7 @@ CREATE TABLE car_mechanic
     FOREIGN KEY (mechanic_id) REFERENCES mechanic (mechanic_id)
 );
 
-CREATE TABLE br_invoice
+CREATE TABLE if not exists br_invoice
 (
     br_invoice_id SERIAL PRIMARY KEY,
     invoice_id INT NOT NULL,
