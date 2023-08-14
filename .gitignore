@@ -1,4 +1,7 @@
 .idea
 .env
 erd.txt recycle.txt
-/recyle
+!/python_scripts/.env
+!/recycle/
+!/recycle/erd.txt
+!/recycle/recycle.txt
