@@ -1,20 +1,19 @@
-# done
-# CREATE TABLE "salesperson"
-# (
-#     "salesperson_id" SERIAL PRIMARY KEY,
-#     "salesperson_name" VARCHAR(100) NOT NULL,
-#     "salesperson_email" VARCHAR(100) UNIQUE NOT NULL,
-#     "salesperson_phone_number" VARCHAR(20) NOT NULL,
-#     "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
-# );
-#doone
+CREATE TABLE "salesperson"
+(
+    "salesperson_id" SERIAL PRIMARY KEY,
+    "salesperson_name" VARCHAR(100) NOT NULL,
+    "salesperson_email" VARCHAR(100) UNIQUE NOT NULL,
+    "salesperson_phone_number" VARCHAR(20) NOT NULL,
+    "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+);
+
 CREATE TABLE "dealership"
 (
     "dealership_id" SERIAL PRIMARY KEY,
     "name" VARCHAR(30),
     "location" VARCHAR(100)
 );
-#done
+
 CREATE TABLE "car"
 (
     "car_id" SERIAL PRIMARY KEY,
@@ -39,7 +38,7 @@ CREATE TABLE "customer"
     "date_of_birth" DATE NOT NULL,
     "created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
 );
-# done
+-- # done
 CREATE TABLE "sales"
 (
     "sales_id" SERIAL PRIMARY KEY,
