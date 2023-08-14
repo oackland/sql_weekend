@@ -67,6 +67,18 @@ generated_emails = set()
 generated_phone_numbers = set()
 
 try:
+	# Create the "dealership" table
+	create_dealership_table = '''
+    CREATE TABLE IF NOT EXISTS dealer.public.dealership
+    (
+        "dealership_id" SERIAL PRIMARY KEY,
+        "name" VARCHAR(30),
+        "location" VARCHAR(100)
+    );
+    '''
+	execute_query(create_dealership_table)
+	print("Dealership table created successfully.")
+
 	for _ in range(num_dealerships):
 		name = f"Dealer {random.randint(100, 999)}"
 		location = generate_random_location()
@@ -76,6 +88,20 @@ try:
 							 f"VALUES('{name}', '{location}')")
 		execute_query(insert_dealership)
 		print("Inserted dealership:", insert_dealership)
+
+	create_salespersons_table = '''
+	CREATE TABLE dealer.public.salesperson
+	(
+		"salesperson_id" SERIAL PRIMARY KEY,
+		"salesperson_name" VARCHAR(100) NOT NULL,
+		"salesperson_email" VARCHAR(100) UNIQUE NOT NULL,
+		"salesperson_phone_number" VARCHAR(20) NOT NULL,
+		"created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+	);
+	'''
+
+	execute_query(create_salespersons_table)
+	print("Salespersons table created successfully.")
 
 	for _ in range(num_salespersons):
 		name = generate_random_name()
@@ -97,6 +123,20 @@ try:
 		execute_query(insert_salesperson)
 		print(insert_salesperson)
 
+	create_customer_table = '''
+	CREATE TABLE "customer"
+	(
+		"customer_id" SERIAL PRIMARY KEY,
+		"first_name" VARCHAR(50) NOT NULL,
+		"last_name" VARCHAR(50) NOT NULL,
+		"email" VARCHAR(100) UNIQUE NOT NULL,
+		"phone_number" VARCHAR(20) NOT NULL,
+		"date_of_birth" DATE NOT NULL,
+		"created_at" timestamp DEFAULT (CURRENT_TIMESTAMP)
+	);
+	'''
+	execute_query(create_customer_table)
+	print("Service table created successfully.")
 	for _ in range(num_customers):
 		first_name = generate_random_name().split()[0]
 		last_name = generate_random_name().split()[1]
@@ -127,6 +167,36 @@ try:
 		execute_query(insert_customer)  # Use the retry function
 		print(insert_customer)
 
+	create_service_table = '''
+    CREATE TABLE IF NOT EXISTS dealer.public.service
+    (
+        service_id SERIAL PRIMARY KEY,
+        car_id INTEGER,
+        service_name VARCHAR(100) NOT NULL,
+        description TEXT,
+        customer_id INTEGER,
+        service_date DATE NOT NULL,
+        service_description TEXT NOT NULL,
+        service_cost DECIMAL(10, 2) NOT NULL,
+        created_at timestamp DEFAULT (CURRENT_TIMESTAMP)
+    );
+    '''
+	execute_query(create_service_table)
+	print("Service table created successfully.")
+
+	# Create the "purchase" table
+	create_purchase_table = '''
+	CREATE TABLE IF NOT EXISTS dealer.public.purchase
+	(
+		purchase_id SERIAL PRIMARY KEY,
+		customer_id INT NOT NULL,
+		car_id INT NOT NULL,
+		purchase_date timestamp DEFAULT (CURRENT_TIMESTAMP)
+	);
+	'''
+	execute_query(create_purchase_table)
+	print("Purchase table created successfully.")
+
 	for _ in range(num_cars):
 		make = random.choice(
 			["Toyota", "Honda", "Ford", "Chevrolet", "Nissan", "BMW", "Mercedes-Benz", "Audi", "Subaru"])
@@ -146,6 +216,38 @@ try:
 		execute_query(insert_car)
 		print(insert_car)
 
+		num_services = random.randint(1, 5)
+		for _ in range(num_services):
+			service_name = random.choice(["Oil Change", "Tire Rotation", "Brake Inspection", "Coolant Flush"])
+			description = "Service description"
+			customer_id = random.randint(1, num_customers)
+			service_date = date(random.randint(2000, 2023), random.randint(1, 12), random.randint(1, 28))
+			service_description = "Detailed service description"
+			service_cost = round(random.uniform(50, 300), 2)
+
+			insert_service = (
+				f"INSERT INTO dealer.public.service "
+				f"(car_id, service_name, description, customer_id, service_date, service_description, service_cost) "
+				f"VALUES({car_id}, '{service_name}', '{description}', {customer_id}, '{service_date}', '{service_description}', {service_cost})"
+		)
+			execute_query(insert_service)
+			print(insert_service)
+
+		# Generate INSERT statements for purchases
+		customer_id = random.randint(1, num_customers)
+		purchase_date = datetime.now()
+
+		insert_purchase = (
+				f"INSERT INTO dealer.public.purchase "
+				f"(customer_id, car_id, purchase_date) "
+				f"VALUES({customer_id}, {car_id}, '{purchase_date}')"
+		)
+		execute_query(insert_purchase)
+		print(insert_purchase)
+
 	print("Finished inserting data.")
+except psycopg2.errors.UniqueViolation as e:
+	print(f"Error: {e}")
+	print("Skipping duplicate entry and continuing...")
 except Exception as e:
 	print(f"An error occurred while inserting data: {str(e)}")

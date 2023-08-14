@@ -210,6 +210,54 @@ CREATE TABLE car_mechanic (
 ```
 </code>
 
+```mermaid
+flowchart TD
+
+subgraph Schema: dealer.public
+    salesperson[Salesperson]
+    dealership[Dealership]
+    car[Car]
+    customer[Customer]
+    sales[Sales]
+    service[Service]
+    purchase[Purchase]
+    invoice[Invoice]
+    customer_car[Customer Car]
+    customer_service[Customer Service]
+    service_ticket[Service Ticket]
+    mechanic[Mechanic]
+    car_mechanic[Car Mechanic]
+    br_invoice[BR Invoice]
+
+    salesperson --> sales
+    car --> sales
+    sales --> customer
+    car --> service
+    service --> customer
+    car --> purchase
+    purchase --> customer
+    car --> invoice
+    salesperson --> invoice
+    invoice --> customer
+    customer --> customer_car
+    car --> customer_car
+    customer --> customer_service
+    service --> customer_service
+    car --> service_ticket
+    service_ticket --> car
+    mechanic --> service
+    car --> car_mechanic
+    mechanic --> car_mechanic
+    invoice --> br_invoice
+    customer --> br_invoice
+end
+
+salesperson --> dealership
+car --> dealership
+
+
+```
+
 [//]: # (A salesperson may sell many cars, but each car is sold by only one salesperson.)
 [//]: # (A customer may buy many cars, but each car is purchased by only one customer.)
 [//]: # (A salesperson writes a single invoice for each car he or she sells.)
